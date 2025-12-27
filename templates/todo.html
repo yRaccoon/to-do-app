@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gingerbread To-Do App</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍪</text></svg>">
+   
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Patrick+Hand&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <!-- Custom Gingerbread Theme Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ginger: {
+                            light: '#E8C497',
+                            base: '#C68E56',
+                            dark: '#8B5A2B',
+                            deep: '#5D3A1A',
+                        },
+                        icing: {
+                            white: '#FFFDF5',
+                            pink: '#FFB7B2',
+                            green: '#9BC5A1',
+                            red: '#D64045'
+                        }
+                    },
+                    fontFamily: {
+                        'hand': ['"Patrick Hand"', 'cursive'],
+                        'body': ['"Fredoka"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-ginger-light font-body text-ginger-deep overflow-x-hidden">
+
+    <!-- Decorative Elements -->
+    <div class="gingerbread-man gingerbread-man-1">
+        <i class="fas fa-gingerbread-man"></i>
+    </div>
+    <div class="gingerbread-man gingerbread-man-2">
+        <i class="fas fa-gingerbread-man"></i>
+    </div>
+    <div class="candy-cane candy-cane-1">
+        <i class="fas fa-candy-cane"></i>
+    </div>
+    <div class="candy-cane candy-cane-2">
+        <i class="fas fa-candy-cane"></i>
+    </div>
+
+    <div class="container">
+        <!-- App Header -->
+        <header class="app-header">
+            <h1 class="app-title hand-font">
+                <i class="fas fa-cookie-bite mr-2"></i>Gingerbread To-Do
+            </h1>
+            <p class="app-subtitle">Stay organized with a touch of sweetness!</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Add Task Form -->
+            <section class="add-task-form icing-border">
+                <h2 class="form-title hand-font">Add New Task</h2>
+                
+                <form id="addTaskForm" action="/add" method="POST">
+                    <div class="form-group">
+                        <label for="task" class="form-label">Task Description</label>
+                        <input type="text" id="task" name="task" class="form-input" 
+                               placeholder="What needs to be done?" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category" class="form-label">Category</label>
+                        <select id="category" name="category" class="form-select">
+                            <option value="General">General</option>
+                            <option value="School">School</option>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Health">Health</option>
+                            <option value="Shopping">Shopping</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="priority" class="form-label">Priority</label>
+                        <select id="priority" name="priority" class="form-select">
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dueDate" class="form-label">Due Date</label>
+                        <input type="date" id="dueDate" name="dueDate" class="form-input">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary gumdrop-btn">
+                            <i class="fas fa-plus-circle"></i> Add Task
+                        </button>
+                        <button type="reset" class="btn btn-secondary gumdrop-btn">
+                            <i class="fas fa-redo"></i> Clear
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Tasks List -->
+            <section class="tasks-container icing-border">
+                <div class="tasks-header">
+                    <h2 class="tasks-title hand-font">Your Tasks</h2>
+                    <div class="tasks-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-tasks"></i>
+                            <span class="stat-number">{{ tasks|length }}</span>
+                            <span>Total</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-check-circle" style="color: #9BC5A1;"></i>
+                            <span class="stat-number">
+                                {{ tasks|selectattr('completed')|list|length }}
+                            </span>
+                            <span>Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock" style="color: #ffa502;"></i>
+                            <span class="stat-number">
+                                {{ tasks|rejectattr('completed')|list|length }}
+                            </span>
+                            <span>Pending</span>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if tasks %}
+                <ul class="task-list">
+                    {% for task in tasks %}
+                    <li class="task-item {{ 'completed' if task.completed else '' }} {{ task.priority|lower }}-priority animate-in"
+                        data-task-id="{{ task.id }}" data-priority="{{ task.priority }}">
+                        
+                        <div class="task-header">
+                            <h3 class="task-title">{{ task.task }}</h3>
+                            <div class="task-actions">
+                                <button class="task-action-btn edit-btn" data-task-id="{{ task.id }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <a href="/delete/{{ task.id }}" class="task-action-btn delete-btn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="task-details">
+                            <span class="task-detail task-category">
+                                <i class="fas fa-tag"></i> {{ task.category }}
+                            </span>
+                            
+                            <span class="task-detail">
+                                <i class="fas fa-flag"></i>
+                                <span class="priority-badge priority-{{ task.priority|lower }}">
+                                    {{ task.priority }}
+                                </span>
+                            </span>
+                            
+                            {% if task.dueDate %}
+                            <span class="task-detail task-due-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <time datetime="{{ task.dueDate }}">
+                                    {{ task.dueDate }}
+                                </time>
+                            </span>
+                            {% endif %}
+                            
+                            <span class="task-detail">
+                                <i class="far fa-clock"></i>
+                                Created: {{ task.creationDate }}
+                            </span>
+                        </div>
+                        
+                        <div class="completion-toggle">
+                            <label class="toggle-label">
+                                <input type="checkbox" data-task-id="{{ task.id }}" 
+                                       {{ 'checked' if task.completed else '' }}
+                                       onchange="window.location.href='/toggle/{{ task.id }}'">
+                                <span class="toggle-switch"></span>
+                                {{ 'Completed' if task.completed else 'Mark Complete' }}
+                            </label>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3 class="empty-title hand-font">No tasks yet!</h3>
+                    <p class="empty-text">Add your first task using the form on the left.</p>
+                </div>
+                {% endif %}
+            </section>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Made with <i class="fas fa-heart" style="color: #D64045;"></i> and lots of sugar.</p>
+            <p class="mt-2 opacity-60">&copy; 2025 Gingerbread To-Do App</p>
+        </footer>
+    </div>
+
+    <!-- Edit Task Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="edit-modal icing-border">
+            <div class="modal-header">
+                <h2 class="modal-title hand-font">Edit Task</h2>
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="editTaskForm" method="POST">
+                <input type="hidden" id="editTaskId" name="task_id">
+                <input type="hidden" id="editCompleted" name="completed">
+                
+                <div class="form-group">
+                    <label for="editTask" class="form-label">Task Description</label>
+                    <input type="text" id="editTask" name="task" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editCategory" class="form-label">Category</label>
+                    <select id="editCategory" name="category" class="form-select">
+                        <option value="General">General</option>
+                        <option value="School">School</option>
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Health">Health</option>
+                        <option value="Shopping">Shopping</option>
+                        <!-- Additional categories will be added dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editPriority" class="form-label">Priority</label>
+                        <select id="editPriority" name="priority" class="form-select">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editDueDate" class="form-label">Due Date</label>
+                        <input type="date" id="editDueDate" name="dueDate" class="form-input">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary gumdrop-btn">
+                            <i class="fas fa-save"></i> Update Task
+                        </button>
+                        <button type="button" class="btn btn-secondary gumdrop-btn" id="cancelEditBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        
+        <!-- Update form action dynamically and add floating animations -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Update form action when submitting
+                const editForm = document.getElementById('editTaskForm');
+                const taskIdInput = document.getElementById('editTaskId');
+                
+                if (editForm && taskIdInput) {
+                    editForm.addEventListener('submit', function(e) {
+                        const taskId = taskIdInput.value;
+                        if (taskId) {
+                            editForm.action = `/update/${taskId}`;
+                        }
+                    });
+                }
+                
+                // Add floating animation to decorative elements
+                const floatingElements = document.querySelectorAll('.gingerbread-man, .candy-cane');
+                floatingElements.forEach((el, index) => {
+                    el.style.animation = `float 6s ease-in-out ${index * 0.5}s infinite`;
+                });
+                
+                // Add delete confirmation (only once - moved from inline onclick)
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+                deleteButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        if (!confirm('Are you sure you want to delete this task?')) {
+                            e.preventDefault();
+                        }
+                    });
+                });
+            });
+            
+            // Helper function to close edit modal
+            function closeEditModal() {
+                const modal = document.getElementById('editModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            }
+            
+            // Set min date for due date inputs
+            window.onload = function() {
+                const today = new Date().toISOString().split('T')[0];
+                const dueDateInput = document.getElementById('dueDate');
+                const editDueDateInput = document.getElementById('editDueDate');
+                
+                if (dueDateInput) dueDateInput.min = today;
+                if (editDueDateInput) editDueDateInput.min = today;
+            };
+        </script>
+    </body>
+</html>

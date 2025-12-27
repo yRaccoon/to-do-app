@@ -1,0 +1,712 @@
+/* Gingerbread Theme CSS for To-Do App */
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Patrick+Hand&display=swap');
+
+/* Custom Color Variables */
+:root {
+    --ginger-light: #E8C497;
+    --ginger-base: #C68E56;
+    --ginger-dark: #8B5A2B;
+    --ginger-deep: #5D3A1A;
+    --icing-white: #FFFDF5;
+    --icing-pink: #FFB7B2;
+    --icing-green: #9BC5A1;
+    --icing-red: #D64045;
+    --priority-high: #ff4757;
+    --priority-medium: #ffa502;
+    --priority-low: #2ed573;
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fredoka', sans-serif;
+    background-color: var(--ginger-light);
+    color: var(--ginger-deep);
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238b5a2b' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3Ccircle cx='13' cy='13' r='1'/%3E%3C/g%3E%3C/svg%3E");
+    min-height: 100vh;
+    padding-bottom: 60px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--ginger-light);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--ginger-dark);
+    border-radius: 6px;
+    border: 3px solid var(--ginger-light);
+}
+
+/* Utility Classes */
+.hand-font {
+    font-family: 'Patrick Hand', cursive;
+}
+
+.icing-border {
+    border: 4px solid var(--icing-white);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1), inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.gumdrop-btn {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+}
+
+.gumdrop-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.app-header {
+    text-align: center;
+    padding: 40px 0 30px;
+    position: relative;
+}
+
+.app-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 3.5rem;
+    color: var(--ginger-deep);
+    margin-bottom: 10px;
+    display: inline-block;
+    background: var(--icing-white);
+    padding: 10px 40px;
+    border-radius: 30px;
+    border: 4px dashed var(--ginger-base);
+    transform: rotate(-2deg);
+}
+
+.app-subtitle {
+    font-size: 1.2rem;
+    color: var(--ginger-dark);
+    opacity: 0.9;
+}
+
+/* Main Content Layout */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+@media (max-width: 992px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Form Styles */
+.add-task-form, .edit-modal {
+    background: var(--icing-white);
+    border-radius: 20px;
+    border: 4px solid var(--ginger-base);
+    box-shadow: 0 8px 25px rgba(139, 90, 43, 0.15);
+    padding: 25px;
+}
+
+.add-task-form {
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.form-title, .modal-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 2rem;
+    color: var(--ginger-deep);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--ginger-dark);
+    font-size: 0.95rem;
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--ginger-light);
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background: white;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--icing-green);
+    box-shadow: 0 0 0 3px rgba(155, 197, 161, 0.2);
+}
+
+.form-input:invalid, .form-select:invalid {
+    border-color: var(--icing-red);
+}
+
+.form-input:valid, .form-select:valid {
+    border-color: var(--icing-green);
+}
+
+/* Task Categories in Edit Form */
+#editCategory option {
+    padding: 8px 12px;
+    background: white;
+    color: var(--ginger-deep);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--icing-red);
+    color: white;
+    border-bottom: 4px solid #b53135;
+}
+
+.btn-primary:hover {
+    background: #e5393e;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--ginger-base);
+    color: white;
+    border-bottom: 4px solid var(--ginger-dark);
+}
+
+.btn-secondary:hover {
+    background: #d4a065;
+    transform: translateY(-2px);
+}
+
+#cancelEditBtn:active {
+    transform: translateY(1px);
+    border-bottom-width: 2px;
+}
+
+/* Tasks Container */
+.tasks-container {
+    background: var(--icing-white);
+    border-radius: 20px;
+    border: 4px solid var(--ginger-base);
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(139, 90, 43, 0.15);
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px dashed var(--ginger-light);
+}
+
+.tasks-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 2.2rem;
+    color: var(--ginger-deep);
+}
+
+.tasks-stats {
+    display: flex;
+    gap: 15px;
+    font-weight: 600;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background: var(--ginger-light);
+    border-radius: 10px;
+    color: var(--ginger-deep);
+}
+
+/* Task List */
+.task-list {
+    list-style: none;
+}
+
+.task-item {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.task-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.task-item.completed {
+    opacity: 0.7;
+    border-color: var(--icing-green);
+}
+
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.task-item.high-priority {
+    border-left: 5px solid var(--priority-high);
+}
+
+.task-item.medium-priority {
+    border-left: 5px solid var(--priority-medium);
+}
+
+.task-item.low-priority {
+    border-left: 5px solid var(--priority-low);
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.task-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--ginger-deep);
+    flex: 1;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.task-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.edit-btn {
+    color: var(--ginger-base);
+    background: var(--ginger-light);
+}
+
+.edit-btn:hover {
+    background: var(--ginger-base);
+    color: white;
+}
+
+.delete-btn {
+    color: var(--icing-red);
+    background: rgba(214, 64, 69, 0.1);
+}
+
+.delete-btn:hover {
+    background: var(--icing-red);
+    color: white;
+}
+
+.task-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--ginger-light);
+}
+
+.task-detail {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--ginger-dark);
+}
+
+.task-category {
+    background: var(--ginger-light);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: var(--ginger-deep);
+}
+
+.task-due-date {
+    color: var(--ginger-dark);
+}
+
+.priority-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.priority-high {
+    background: rgba(255, 71, 87, 0.1);
+    color: var(--priority-high);
+}
+
+.priority-medium {
+    background: rgba(255, 165, 2, 0.1);
+    color: var(--priority-medium);
+}
+
+.priority-low {
+    background: rgba(46, 213, 115, 0.1);
+    color: var(--priority-low);
+}
+
+/* Completion Toggle */
+.completion-toggle {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--ginger-dark);
+}
+
+.toggle-switch {
+    width: 50px;
+    height: 26px;
+    background: #ddd;
+    border-radius: 13px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]:checked + .toggle-switch {
+    background: var(--icing-green);
+}
+
+input[type="checkbox"]:checked + .toggle-switch::after {
+    left: 26px;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+/* Edit Modal */
+.edit-modal {
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: modalAppear 0.3s ease-out;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px dashed var(--ginger-light);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--ginger-dark);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-modal:hover {
+    background: var(--ginger-light);
+}
+
+/* Modal Loading State */
+.edit-modal {
+    position: relative;
+}
+
+.modal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--ginger-base);
+}
+
+.modal-loading i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.modal-loading p {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Decorative Elements */
+.gingerbread-man {
+    position: absolute;
+    font-size: 2rem;
+    color: var(--ginger-dark);
+    opacity: 0.3;
+    z-index: -1;
+}
+
+.gingerbread-man-1 {
+    top: 10%;
+    left: 5%;
+    transform: rotate(-15deg);
+}
+
+.gingerbread-man-2 {
+    bottom: 10%;
+    right: 5%;
+    transform: rotate(15deg);
+}
+
+.candy-cane {
+    position: absolute;
+    font-size: 1.5rem;
+    color: var(--icing-red);
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.candy-cane-1 {
+    top: 20%;
+    right: 10%;
+    transform: rotate(45deg);
+}
+
+.candy-cane-2 {
+    bottom: 20%;
+    left: 10%;
+    transform: rotate(-45deg);
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: var(--ginger-dark);
+    font-size: 0.9rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ginger-dark);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: var(--ginger-light);
+    margin-bottom: 20px;
+}
+
+.empty-title {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 2rem;
+    color: var(--ginger-base);
+    margin-bottom: 10px;
+}
+
+.empty-text {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* Animations */
+.animate-in {
+    animation: slideIn 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Loading spinner */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-title {
+        font-size: 2.5rem;
+        padding: 8px 25px;
+    }
+    
+    .main-content {
+        gap: 20px;
+    }
+    
+    .tasks-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .tasks-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .task-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .task-actions {
+        align-self: flex-end;
+    }
+    
+    .edit-modal {
+        width: 95%;
+        padding: 20px;
+        margin: 10px;
+    }
+}
